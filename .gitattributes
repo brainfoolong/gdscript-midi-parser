@@ -1,0 +1,6 @@
+*.gd text eol=lf
+*.md text eol=lf
+
+.github export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
