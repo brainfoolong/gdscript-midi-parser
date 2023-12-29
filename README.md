@@ -1,6 +1,9 @@
-# Godot GDScript 4+ Midi File Parser
+# Godot GDScript 4+ Midi File Parser and Player
 
-Parse your midi files directly with native GDScript with no other dependencies.
+Parse your midi files directly with native GDScript 4+ with no other dependencies. The example also include a demo of how you can create a sound player based on the parsed midi data.
+
+## Install
+Clone/Download this repository into your project.
 
 ## Usage
 ```python
@@ -14,6 +17,10 @@ for track in parser.tracks:
         # do something with events here   
 ```
     
-## Example of how to implement a playback
+## Playback Demo
 
-See `midi_file_player_example.gd`
+See `midi_file_player_example.gd` or load and play scene `demo/midi_demo`.
+
+It will contain all required parts (timing, _process loop) to play notes at correct times.
+
+The demo uses a very simple generic audio signal generator. Quality is not good but frequencies are correct. It will play "Beethoven - Fur Elise", which you will know for sure.

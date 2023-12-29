@@ -148,6 +148,7 @@ class Midi extends Event:
 	var octave : int = -1 # note octave, example 5
 	var key : String = '' # note key, example E
 	var note_name  : String = '' # note name, example E5
+	var frequency : float = 0.0 # note frequency in hz
 	var	velocity : float = 0.0 # note velocity between 0 and 1
 	
 class Meta extends Event:
@@ -357,6 +358,7 @@ func parse_channel_event() -> int:
 		current_midi.key = key_order[midiKey - (current_midi.octave * 12)]
 		current_midi.note_name = current_midi.key + str(current_midi.octave)
 		current_midi.velocity = 1.0 / 127.0 * current_midi.param2
+		current_midi.frequency = 440.0 * (2 ** ((current_midi.param1 - 69) / 12.0))
 	return MIDI_PARSER_TRACK_MIDI
 	
 """
