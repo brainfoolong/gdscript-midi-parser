@@ -3,7 +3,7 @@ Midi Player Demo
 See comments bellow in _process, when to start/stop a note
 @author BrainFooLong
 @url https://github.com/brainfoolong/gdscript-midi-parser
-""" 
+"""
 
 class_name MidiFilePlayerExample extends Node
 
@@ -31,7 +31,7 @@ func pause():
 func stop():
 	playing = false
 
-func play_sound(note_name, hz = 0, volume = 0):		
+func play_sound(note_name, hz = 0, volume = 0):
 	if note_name in audio_streams:
 		audio_streams[note_name].stop()
 		audio_streams[note_name].queue_free()
@@ -50,7 +50,7 @@ func play_sound(note_name, hz = 0, volume = 0):
 		while to_fill > 0:
 			playback.push_frame(Vector2.ONE * sin(phase * TAU)) # Audio frames are stereo.
 			phase = fmod(phase + increment, 1.0)
-			to_fill -= 1	
+			to_fill -= 1
 				
 
 func _ready():
@@ -64,25 +64,22 @@ func _process(delta):
 		return
 	var all_finished = true
 	for track in parser.tracks:
-		var delta_ms = 0
 		var player_process
 		# storing internal player process in track data
 		if "player_process" not in track.additional_data:
-			track.additional_data.player_process = {"time" : Time.get_ticks_msec(), "event_index" : 0}
+			track.additional_data.player_process = {"start_time" : Time.get_ticks_msec(), "delta_tick" : 0, "event_index" : 0}
 			player_process = track.additional_data.player_process
 		else:
 			player_process = track.additional_data.player_process
-			delta_ms = Time.get_ticks_msec() - player_process.time		
 			
-		var delta_ticks = delta_ms / ms_per_tick
 		while player_process.event_index < track.events.size():
+			var elapsed_ms = Time.get_ticks_msec() - player_process.start_time
+			var delta_ticks = elapsed_ms / ms_per_tick
 			var event = track.events[player_process.event_index]
-			if event.delta_ticks > delta_ticks:
+			if player_process.delta_tick + event.delta_ticks > delta_ticks:
 				break
+			player_process.delta_tick += event.delta_ticks
 			player_process.event_index += 1
-			player_process.time = Time.get_ticks_msec()
-			delta_ms = 0
-			delta_ticks = 0
 			self.emit_signal("event", event, track)
 			if event.event_type == MidiFileParser.Event.EventType.META && event.type == MidiFileParser.Meta.Type.SET_TEMPO:
 				# tempo update
@@ -105,7 +102,7 @@ func _process(delta):
 		if all_finished && player_process.event_index != track.events.size():
 			all_finished = false
 			
-	if all_finished:		
+	if all_finished:
 		print("finished")
 		self.emit_signal("finished")
 		stop()
