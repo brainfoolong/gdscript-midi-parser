@@ -315,6 +315,7 @@ func parse_channel_event() -> int:
 		
 	current_midi = Midi.new()
 	current_midi.delta_ticks = current_track.delta_ticks
+	current_midi.absolute_ticks = current_track.absolute_ticks
 	current_midi.event_type = current_meta.EventType.MIDI
 	current_track.midi.append(current_midi)
 	current_track.events.append(current_midi)
@@ -375,6 +376,7 @@ func parse_sysex_event() -> int:
 	current_track.sysex.append(current_sysex)
 	current_track.events.append(current_sysex)
 	current_sysex.delta_ticks = current_track.delta_ticks
+	current_sysex.absolute_ticks = current_track.absolute_ticks
 	current_sysex.event_type = current_meta.EventType.SYSEX
 	current_sysex.length = int_variable_from_buffer()
 	
@@ -407,6 +409,7 @@ func parse_meta_event() -> int:
 	current_track.meta.append(current_meta)
 	current_track.events.append(current_meta) 
 	current_meta.delta_ticks = current_track.delta_ticks
+	current_meta.absolute_ticks = current_track.absolute_ticks
 	current_meta.event_type = current_meta.EventType.META
 	current_meta.type = meta_type
 	current_meta.length = int_variable_from_buffer()
