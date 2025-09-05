@@ -420,8 +420,8 @@ func parse_meta_event() -> int:
 	current_meta.bytes = bytes.slice(byte_index, byte_index + current_meta.length)
 	current_meta.value = buffer_to_int(current_meta.bytes)
 	if current_meta.type == current_meta.Type.SET_TEMPO:
-		current_meta.bpm = 60000000 / current_meta.value
-		current_meta.ms_per_tick = 60000 / (current_meta.bpm * header.time_division)
+		current_meta.bpm = 60000000.0 / current_meta.value
+		current_meta.ms_per_tick = 60000.0 / (current_meta.bpm * header.time_division)
 	byte_index += current_meta.length
 	
 	return MIDI_PARSER_TRACK_META
